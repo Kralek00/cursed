@@ -1,0 +1,22 @@
+{% extends 'main/index/layout.html' %}
+
+{% block title %}Редактировать персонажа{% endblock %}
+
+{% block content %}
+<div class="features">
+    <div class="container">
+        <h1>Редактировать персонажа: {{ character.Name }}</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.Member_ID }} <br>
+            {{ form.Gender }} <br>
+            {{ form.Name }} <br>
+            <span>{{ errors }}</span>
+            <div class="button-container">
+                <button class="btn btn-success" type="submit">Добавить участника</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

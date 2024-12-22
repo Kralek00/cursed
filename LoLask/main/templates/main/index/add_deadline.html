@@ -1,0 +1,23 @@
+{% extends 'main/index/layout.html' %}
+
+{% block title %}Добавление дедлайна{% endblock %}
+
+{% block content %}
+<div class="features">
+    <div class="container">
+        <h1>Добавление персонажа в дедлайн таблицу</h1>
+        <p>Добавляться должны только занятые персонажи! Добавьте предварительно отвечающего.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.Character_ID }} <br>
+            {{ form.Type_of_deadlines }} <br>
+            {{ form.Extra_time}} <br>
+            <span>{{ errors }}</span>
+            <div class="button-container">
+                <button class="btn btn-success" type="submit">Добавить дедлайн</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

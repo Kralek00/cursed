@@ -1,0 +1,109 @@
+{% extends 'main/index/layout.html' %}
+
+{% block title %}Участники{% endblock %}
+
+{% block content %}
+<div class="features">
+    <h1>Участники</h1>
+    <p>Отвечающие и админы</p>
+</div>
+
+<div class="container">
+    <a href="{% url 'add_member' %}">
+        <button class="btn btn-info custom-button">Добавить участника</button>
+    </a>
+    <div class="tables">
+        <div class="table-container">
+            <table id="membersTable">
+                <thead>
+                <tr>
+                    <th class="special-cell" id="nameHeader">Имя</th>
+                    <th class="special-cell" id="roleHeader">Роль</th>
+                    <th class="special-cell" id="dobHeader">День рождения</th>
+                    <th class="special-cell">Ссылка на группу</th>
+                    <th class="special-cell">Ссылка на страницу</th>
+                    <th class="special-cell">Дата присоединения</th>
+                    <th class="special-cell">Редактирование</th>
+                    <th class="special-cell">Удаление</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for member in members %}
+                <tr>
+                    <td>{{ member.FCS }}</td>
+                    <td>{{ member.get_Role_display }}</td>
+                    <td>{{ member.Date_of_birth|default_if_none:" " }}</td>
+                    <td>
+                        {% if member.Link_to_the_group %}
+                        <a href="{{ member.Link_to_the_group }}" target="_blank">
+                            {{ member.Link_to_the_group }}
+                        </a>
+                        {% else %}
+                        {{ member.Link_to_the_group|default_if_none:" " }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if member.Link_to_the_page %}
+                        <a href="{{ member.Link_to_the_page }}" target="_blank">
+                            {{ member.Link_to_the_page }}
+                        </a>
+                        {% else %}
+                        {{ member.Link_to_the_page|default_if_none:" " }}
+                        {% endif %}
+                    </td>
+                    <td>{{ member.Date_of_joing }}</td>
+                    <td>
+                        <a href="{% url 'edit_member' member.ID %}">
+                            <button class="btn btn-info custom-edit-button">Редактировать</button>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'delete_member' member.ID %}"
+                           onclick="return confirm('Вы уверены, что хотите удалить этого участника?');">
+                            <button class="btn btn-danger custom-delete-button">Удалить</button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const table = document.getElementById('membersTable');
+        const headers = table.querySelectorAll('th');
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+
+        headers.forEach(header => {
+            header.addEventListener('click', () => {
+                const index = Array.from(headers).indexOf(header);
+                const isAscending = header.classList.contains('asc');
+                const direction = isAscending ? -1 : 1;
+
+                rows.sort((a, b) => {
+                    const aText = a.children[index].textContent.trim();
+                    const bText = b.children[index].textContent.trim();
+
+                    if (index === 2) { // Special case for date of birth (MM-DD)
+                        const [aMonth, aDay] = aText.split('-').map(Number);
+                        const [bMonth, bDay] = bText.split('-').map(Number);
+                        return (aMonth - bMonth) || (aDay - bDay) * direction;
+                    }
+
+                    return aText.localeCompare(bText) * direction;
+                });
+
+                rows.forEach(row => tbody.appendChild(row));
+
+                headers.forEach(h => h.classList.remove('asc', 'desc'));
+                header.classList.toggle('asc', !isAscending);
+                header.classList.toggle('desc', isAscending);
+            });
+        });
+    });
+</script>
+{% endblock %}

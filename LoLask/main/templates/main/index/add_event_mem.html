@@ -1,0 +1,23 @@
+{% extends 'main/index/layout.html' %}
+
+{% block title %}Добавление участников ивента{% endblock %}
+
+{% block content %}
+<div class="features">
+    <div class="container">
+        <h1>Добавление участников ивента</h1>
+        <p>Добавляться должны только персонажи! Создайте предварительно ивент и добавьте существующих персонажей.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.Event_ID }} <br>
+            {{ form.Character_ID }} <br>
+            {{ form.Passed_or_failed }} <br>
+            <span>{{ errors }}</span>
+            <div class="button-container">
+                <button class="btn btn-success" type="submit">Изменить участника</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

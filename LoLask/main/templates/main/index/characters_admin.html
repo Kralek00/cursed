@@ -1,0 +1,162 @@
+{% extends 'main/index/layout.html' %}
+
+{% block title %}Персонажи{% endblock %}
+
+{% block content %}
+<div class="features">
+    <h1>Чемпионы</h1>
+    <p>Занятые персонажи</p>
+</div>
+
+<div class="container">
+    <a href="{% url 'add_character' %}">
+        <button class="btn btn-info custom-button">Добавить персонажа</button>
+    </a>
+    <div class="tables" style="margin-bottom: 50px;">
+        <div class="table-container">
+            <h2>Мужские персонажи</h2>
+            <table id="male-characters-table">
+                <thead>
+                <tr>
+                    <th class="special-cell" onclick="sortTable('male-characters-table', 0)">Имя</th>
+                    <th class="special-cell">Отвечающий</th>
+                    <th class="special-cell" onclick="sortTable('male-characters-table', 2)">День рождения</th>
+                    <th class="special-cell">Ссылка на группу</th>
+                    <th class="special-cell">Дата присоединения</th>
+                    <th class="special-cell">Редактирование</th>
+                    <th class="special-cell">Удаление</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for characters_adm in male_characters %}
+                <tr>
+                    <td>{{ characters_adm.Name }}</td>
+                    <td>
+                        {% if characters_adm.Member_ID.Link_to_the_page %}
+                        <a href="{{ characters_adm.Member_ID.Link_to_the_page }}" target="_blank">
+                            {{ characters_adm.Member_ID.Link_to_the_page }}
+                        </a>
+                        {% else %}
+                        {{ characters_adm.Member_ID.Link_to_the_page|default_if_none:" " }}
+                        {% endif %}
+                    </td>
+                    <td>{{ characters_adm.Member_ID.Date_of_birth|default_if_none:" " }}</td>
+                    <td>
+                        {% if characters_adm.Member_ID.Link_to_the_group %}
+                        <a href="{{ characters_adm.Member_ID.Link_to_the_group }}" target="_blank">
+                            {{ characters_adm.Member_ID.Link_to_the_group }}
+                        </a>
+                        {% else %}
+                        {{ characters_adm.Member_ID.Link_to_the_group|default_if_none:" " }}
+                        {% endif %}
+                    </td>
+                    <td>{{ characters_adm.Member_ID.Date_of_joing }}</td>
+                    <td>
+                        <a href="{% url 'edit_character' characters_adm.ID %}">
+                            <button class="btn btn-info custom-edit-button">Редактировать</button>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'delete_character' characters_adm.ID %}"
+                           onclick="return confirm('Вы уверены, что хотите удалить этого персонажа?');">
+                            <button class="btn btn-danger custom-delete-button">Удалить</button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="tables">
+        <div class="table-container">
+            <h2>Женские персонажи</h2>
+            <table id="female-characters-table">
+                <thead>
+                <tr>
+                    <th class="special-cell" onclick="sortTable('female-characters-table', 0)">Имя</th>
+                    <th class="special-cell">Отвечающий</th>
+                    <th class="special-cell" onclick="sortTable('female-characters-table', 2)">День рождения</th>
+                    <th class="special-cell">Ссылка на группу</th>
+                    <th class="special-cell">Дата присоединения</th>
+                    <th class="special-cell">Редактирование</th>
+                    <th class="special-cell">Удаление</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for characters_adm in female_characters %}
+                <tr>
+                    <td>{{ characters_adm.Name }}</td>
+                    <td>
+                        {% if characters_adm.Member_ID.Link_to_the_page %}
+                        <a href="{{ characters_adm.Member_ID.Link_to_the_page }}" target="_blank">
+                            {{ characters_adm.Member_ID.Link_to_the_page }}
+                        </a>
+                        {% else %}
+                        {{ characters_adm.Member_ID.Link_to_the_page|default_if_none:" " }}
+                        {% endif %}
+                    </td>
+                    <td>{{ characters_adm.Member_ID.Date_of_birth|default_if_none:" " }}</td>
+                    <td>
+                        {% if characters_adm.Member_ID.Link_to_the_group %}
+                        <a href="{{ characters_adm.Member_ID.Link_to_the_group }}" target="_blank">
+                            {{ characters_adm.Member_ID.Link_to_the_group }}
+                        </a>
+                        {% else %}
+                        {{ characters_adm.Member_ID.Link_to_the_group|default_if_none:" " }}
+                        {% endif %}
+                    </td>
+                    <td>{{ characters_adm.Member_ID.Date_of_joing }}</td>
+                    <td>
+                        <a href="{% url 'edit_character' characters_adm.ID %}">
+                            <button class="btn btn-info custom-edit-button">Редактировать</button>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'delete_character' characters_adm.ID %}"
+                           onclick="return confirm('Вы уверены, что хотите удалить этого персонажа?');">
+                            <button class="btn btn-danger custom-delete-button">Удалить</button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function sortTable(tableId, columnIndex) {
+        var table, rows, switching, i, x, y, shouldSwitch, xContent, yContent;
+        table = document.getElementById(tableId);
+        switching = true;
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[columnIndex];
+                y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+                xContent = x.innerHTML.toLowerCase();
+                yContent = y.innerHTML.toLowerCase();
+
+                // Handle empty cells to be sorted at the bottom
+                if (xContent === "") {
+                    shouldSwitch = false;
+                } else if (yContent === "") {
+                    shouldSwitch = true;
+                } else if (xContent > yContent) {
+                    shouldSwitch = true;
+                }
+
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+    }
+</script>
+{% endblock %}

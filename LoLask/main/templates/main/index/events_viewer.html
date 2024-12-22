@@ -1,0 +1,31 @@
+{% extends 'main/index/layout.html' %}
+
+{% block title %}Ивенты{% endblock %}
+
+{% block content %}
+<div class="features">
+    <h1>Ивенты</h1>
+    <p> Крутые ивенты слева направо</p>
+</div>
+
+<div class="container">
+    <div class="tables">
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th class="special-cell">Название</th>
+                    <th class="special-cell">Теги ивента</th>
+                    <th class="special-cell">Дата ивента</th>
+                </tr>
+                {% for event in events %}
+                <tr>
+                    <td>{{ event.Name }}</td>
+                    <td>{{ event.Tags }}</td>
+                    <td>{{ event.Date_of_event }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

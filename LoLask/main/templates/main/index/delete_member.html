@@ -1,0 +1,17 @@
+{% extends 'main/index/layout.html' %}
+
+{% block title %}Удалить участника{% endblock %}
+
+{% block content %}
+<div class="features">
+    <div class="container">
+        <h1>Вы уверены, что хотите удалить участника {{ member.FCS }}?</h1>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit">Удалить</button>
+            <a href="{% url 'members_admin' %}">Отмена</a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

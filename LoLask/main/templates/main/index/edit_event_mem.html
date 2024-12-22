@@ -1,0 +1,21 @@
+{% extends 'main/index/layout.html' %}
+
+{% block title %}Редактировать участника ивента{% endblock %}
+
+{% block content %}
+<div class="features">
+    <div class="container">
+        <h1>Редактировать участника: {{ event_mem.Character_ID }}</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.Event_ID }} <br>
+            {{ form.Character_ID }} <br>
+            {{ form.Passed_or_failed }} <br>
+            <span>{{ errors }}</span>
+            <div class="button-container">
+                <button class="btn btn-success" type="submit">Сохранить изменения</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

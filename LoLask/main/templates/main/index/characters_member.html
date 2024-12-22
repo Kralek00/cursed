@@ -1,0 +1,117 @@
+{% extends 'main/index/layout.html' %}
+
+{% block title %}Персонажи{% endblock %}
+
+{% block content %}
+<div class="features">
+    <h1>Чемпионы</h1>
+    <p>Занятые персонажи</p>
+</div>
+
+<div class="container">
+    <div class="tables">
+        <div class="table-container">
+            <h2>Мужские персонажи</h2>
+            <table id="male-characters-table">
+                <thead>
+                <tr>
+                    <th class="special-cell" id="name-header">Имя</th>
+                    <th class="special-cell">Отвечающий</th>
+                    <th class="special-cell" id="dob-header">День рождения</th>
+                    <th class="special-cell">Ссылка на группу</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for characters_mem in male_characters %}
+                <tr>
+                    <td>{{ characters_mem.Name }}</td>
+                    <td>
+                        {% if characters_mem.Member_ID.Link_to_the_page %}
+                        <a href="{{ characters_mem.Member_ID.Link_to_the_page }}" target="_blank">
+                            {{ characters_mem.Member_ID.Link_to_the_page }}
+                        </a>
+                        {% else %}
+                        {{ characters_mem.Member_ID.Link_to_the_page|default_if_none:" " }}
+                        {% endif %}
+                    </td>
+                    <td>{{ characters_mem.Member_ID.Date_of_birth|default_if_none:" " }}</td>
+                    <td>
+                        {% if characters_mem.Member_ID.Link_to_the_group %}
+                        <a href="{{ characters_mem.Member_ID.Link_to_the_group }}" target="_blank">
+                            {{ characters_mem.Member_ID.Link_to_the_group }}
+                        </a>
+                        {% else %}
+                        {{ characters_mem.Member_ID.Link_to_the_group|default_if_none:" " }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-container">
+            <h2>Женские персонажи</h2>
+            <table id="female-characters-table">
+                <thead>
+                <tr>
+                    <th class="special-cell" id="name-header-female">Имя</th>
+                    <th class="special-cell">Отвечающий</th>
+                    <th class="special-cell" id="dob-header-female">День рождения</th>
+                    <th class="special-cell">Ссылка на группу</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for characters_mem in female_characters %}
+                <tr>
+                    <td>{{ characters_mem.Name }}</td>
+                    <td>
+                        {% if characters_mem.Member_ID.Link_to_the_page %}
+                        <a href="{{ characters_mem.Member_ID.Link_to_the_page }}" target="_blank">
+                            {{ characters_mem.Member_ID.Link_to_the_page }}
+                        </a>
+                        {% else %}
+                        {{ characters_mem.Member_ID.Link_to_the_page|default_if_none:" " }}
+                        {% endif %}
+                    </td>
+                    <td>{{ characters_mem.Member_ID.Date_of_birth|default_if_none:" " }}</td>
+                    <td>
+                        {% if characters_mem.Member_ID.Link_to_the_group %}
+                        <a href="{{ characters_mem.Member_ID.Link_to_the_group }}" target="_blank">
+                            {{ characters_mem.Member_ID.Link_to_the_group }}
+                        </a>
+                        {% else %}
+                        {{ characters_mem.Member_ID.Link_to_the_group|default_if_none:" " }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    function sortTable(tableId, columnIndex, isDate = false) {
+        const table = document.getElementById(tableId);
+        const rows = Array.from(table.tBodies[0].rows);
+        const sortedRows = rows.sort((a, b) => {
+            const aText = a.cells[columnIndex].innerText.trim();
+            const bText = b.cells[columnIndex].innerText.trim();
+            if (isDate) {
+                return aText.localeCompare(bText);
+            }
+            return aText.localeCompare(bText);
+        });
+        sortedRows.forEach(row => table.tBodies[0].appendChild(row));
+    }
+
+    document.getElementById('name-header').addEventListener('click', () => sortTable('male-characters-table', 0));
+    document.getElementById('dob-header').addEventListener('click', () => sortTable('male-characters-table', 2, true));
+    document.getElementById('name-header-female').addEventListener('click', () => sortTable('female-characters-table', 0));
+    document.getElementById('dob-header-female').addEventListener('click', () => sortTable('female-characters-table', 2, true));
+</script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'main/index/layout.html' %}
+
+{% block title %}Дедлайн{% endblock %}
+
+{% block content %}
+<div class="features">
+    <h1>Дедлайн</h1>
+    <p>Сводка по дедлайну за текущий месяц</p>
+</div>
+
+<div class="container">
+    <a href="{% url 'add_deadline' %}">
+        <button class="btn btn-info custom-button">Добавить дедлайн</button>
+    </a>
+    <div class="tables">
+        <div class="table-container">
+            <h2>Мужские персонажи</h2>
+            <table>
+                <tr>
+                    <th class="special-cell">Персонаж(м)</th>
+                    <th class="special-cell">Ответы или долги</th>
+                    <th class="special-cell">Доп. время</th>
+                    <th class="special-cell">Редактирование</th>
+                    <th class="special-cell">Удаление</th>
+                </tr>
+                {% for deadline in male_deadlines %}
+                <tr>
+                    <td>{{ deadline.Character_ID.Name }}</td>
+                    <td>{{ deadline.Type_of_deadlines }}</td>
+                    <td>{{ deadline.Extra_time|default_if_none:" " }}</td>
+                    <td>
+                        <a href="{% url 'edit_deadline' deadline.ID %}">
+                            <button class="btn btn-info custom-edit-button">Редактировать</button>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'delete_deadline' deadline.ID %}"
+                           onclick="return confirm('Вы уверены, что хотите удалить этот дедлайн?');">
+                            <button class="btn btn-danger custom-delete-button">Удалить</button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="table-container">
+            <h2>Женские персонажи</h2>
+            <table>
+                <tr>
+                    <th class="special-cell">Персонаж(ж)</th>
+                    <th class="special-cell">Ответы или долги</th>
+                    <th class="special-cell">Доп. время</th>
+                    <th class="special-cell">Редактирование</th>
+                    <th class="special-cell">Удаление</th>
+                </tr>
+                {% for deadline in female_deadlines %}
+                <tr>
+                    <td>{{ deadline.Character_ID.Name }}</td>
+                    <td>{{ deadline.Type_of_deadlines }}</td>
+                    <td>{{ deadline.Extra_time|default_if_none:" " }}</td>
+                    <td>
+                        <a href="{% url 'edit_deadline' deadline.ID %}">
+                            <button class="btn btn-info custom-edit-button">Редактировать</button>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'delete_deadline' deadline.ID %}"
+                           onclick="return confirm('Вы уверены, что хотите удалить этот дедлайн?');">
+                            <button class="btn btn-danger custom-delete-button">Удалить</button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <div class="export-buttons">
+        <a href="{% url 'export_deadline_to_docx' %}" class="btn btn-primary export-button">Экспорт в Word</a>
+        <a href="{% url 'export_deadline_to_excel' %}" class="btn btn-primary export-button">Экспорт в Excel</a>
+    </div>
+</div>
+
+{% endblock %}

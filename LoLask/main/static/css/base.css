@@ -1,0 +1,291 @@
+body {
+    font-family: 'Tahoma', sans-serif;
+    background: #0a1428;
+    position: relative;
+}
+
+/* Контейнер для заголовка */
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #000000;
+}
+
+/* Навигационная паненль в заголовке */
+.header-nav {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Список ссылок */
+.header-list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Стили для навигационных ссылок внутри списка */
+.header-list .nav-a {
+    font-size: 24px;
+    text-align: center;
+}
+
+/* Общие стили для всех навигационных ссылок */
+.nav-a {
+    font-size: 24px;
+    text-align: center;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #ffffff;
+    position: relative;
+}
+
+/* Псевдоэлемент для подчеркивания при наведении */
+.nav-a::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: #00a0ba;
+    transition: width 0.3s;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Изменение ширины подчеркивания при наведении */
+.nav-a:hover::after {
+    width: 100%;
+}
+
+/* Изменение цвета текста и фона при наведении */
+.nav-a:hover {
+    color: #c8aa6e;
+    background-color: #333333;
+    border-radius: 5px;
+}
+
+/* Стили для логотипа */
+.logo {
+    margin-left: 10px;
+    font-size: 24px;
+}
+
+/* Контейнер для профиля в заголовке */
+.header-profile {
+    margin-left: auto;
+}
+
+/* Стили для навигационных ссылок в профиле */
+.header-profile .nav-a {
+    font-size: 24px;
+    text-align: center;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #ffffff;
+}
+
+/* Изменение цвета текста и фона при наведении на ссылки в профиле */
+.header-profile .nav-a:hover {
+    color: #c8aa6e;
+    border-radius: 5px;
+}
+
+main .features {
+    float: none;
+    color: #ffffff;
+    margin: 30px auto 0;
+    text-align: justify;
+    width: 70%;
+    overflow: auto;
+}
+
+main .features h1 {
+    font-size: 50px;
+    text-align: center;
+}
+
+main .features p {
+    margin: 20px auto;
+    text-align: center;
+}
+
+main .container {
+    max-width: 1450px; /* Максимальная ширина контейнера */
+    margin: 0 auto; /* Центрирование контейнера */
+    padding: 0 15px; /* Отступы внутри контейнера */
+    box-sizing: border-box; /* Включает отступы и границы в общую ширину */
+}
+
+main .tables {
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+    overflow: auto;
+}
+
+main .table {
+    margin: 10px; /* Отступы между таблицами */
+    flex: 0 0 250px; /* Равномерное распределение ширины между таблицами */
+    min-width: 180px; /* Минимальная ширина таблицы */
+    max-width: 350px; /* Максимальная ширина таблицы */
+    margin-bottom: 20px;
+    overflow: auto;
+}
+
+main .tables th, td {
+    color: black;
+    border: 3px solid #704b01;
+    padding: 8px;
+    text-align: left;
+    background: #f2e1c0;
+}
+
+main .tables th {
+    background-color: #f2f2f2;
+}
+
+main .tables tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+main .tables tr:hover {
+    background-color: #ffffff;
+}
+
+main .tables th.special-cell {
+    background: #c8aa6e;
+}
+
+main .table-container {
+    flex: 0 0 450px;
+    margin: 0 10px;
+}
+
+main .table-container h2 {
+    text-align: center;
+}
+
+.event_Col {
+    width: 500px;
+}
+
+.left-frame {
+    border-right: 1px solid #ccc;
+}
+
+.right-frame {
+    border-left: 1px solid #ccc;
+}
+
+.main-container {
+    width: 60%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-delete-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.custom-edit-button {
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.custom-button {
+    background-color: #17a2b8; /* Цвет фона кнопки */
+    color: white; /* Цвет текста */
+    border: none; /* Убираем границу */
+    padding: 10px 20px; /* Внутренние отступы */
+    text-align: center; /* Выравнивание текста по центру */
+    text-decoration: none; /* Убираем подчеркивание */
+    display: inline-block; /* Отображение в виде блочного элемента */
+    font-size: 16px; /* Размер шрифта */
+    margin-bottom: 20px;
+    cursor: pointer; /* Курсор в виде руки */
+    border-radius: 5px; /* Скругленные углы */
+    transition: background-color 0.3s; /* Плавный переход цвета фона */
+    float: right; /* Выравнивание по правому краю */
+}
+
+.export-button {
+    background-color: #17a2b8; /* Цвет фона кнопки */
+    color: white; /* Цвет текста */
+    border: none; /* Убираем границу */
+    padding: 10px 20px; /* Внутренние отступы */
+    text-align: center; /* Выравнивание текста по центру */
+    text-decoration: none; /* Убираем подчеркивание */
+    display: inline-block; /* Отображение в виде блочного элемента */
+    font-size: 16px; /* Размер шрифта */
+    cursor: pointer; /* Курсор в виде руки */
+    border-radius: 5px; /* Скругленные углы */
+    transition: background-color 0.3s; /* Плавный переход цвета фона */
+    float: right; /* Выравнивание по правому краю */
+    margin-right: 20px; /* Добавляет отступ справа */
+}
+
+
+.custom-button:last-child {
+    margin-right: 0; /* Убирает отступ у последней кнопки */
+}
+
+.custom-button:hover {
+    background-color: #138496; /* Цвет фона при наведении */
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Отступ сверху для визуального отделения */
+}
+
+.frame1 {
+    width: 250px;
+    position: static;
+    bottom: 0;
+    left: 0;
+    user-select: none;
+}
+
+.frame2 {
+    width: 250px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    user-select: none;
+}
+
+.frame3 {
+    width: 250px;
+    position: absolute;
+    top: 40px;
+    left: 0;
+    user-select: none;
+}
+
+.frame4 {
+    width: 250px;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    user-select: none;
+}

@@ -1,0 +1,24 @@
+{% extends 'main/index/layout.html' %}
+
+{% block title %}Редактировать участника{% endblock %}
+
+{% block content %}
+<div class="features">
+    <div class="container">
+        <h1>Редактировать участника: {{ member.FCS }}</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.FCS }} <br>
+            {{ form.Role }} <br>
+            {{ form.Link_to_the_page }} <br>
+            {{ form.Date_of_birth }} <br>
+            {{ form.Link_to_the_group }} <br>
+            {{ form.Date_of_joing }} <br>
+            <span>{{ errors }}</span>
+            <div class="button-container">
+                <button class="btn btn-success" type="submit">Сохранить изменения</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

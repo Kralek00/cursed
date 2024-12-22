@@ -1,0 +1,111 @@
+{% extends 'main/index/layout.html' %}
+
+{% block title %}Ивенты{% endblock %}
+
+{% block content %}
+<div class="features">
+    <h1>Ивенты</h1>
+    <p> Крутые ивенты слева направо</p>
+</div>
+
+<div class="container">
+    <div class="tables" style="margin-bottom: 50px;">
+        <div class="table-container">
+            <a href="{% url 'add_event_org' %}">
+                <button class="btn btn-info custom-button">Добавить ивент</button>
+            </a>
+            <table>
+                <tr>
+                    <th class="special-cell">Название</th>
+                    <th class="special-cell">Организатор</th>
+                    <th class="special-cell">Теги ивента</th>
+                    <th class="special-cell">Дата ивента</th>
+                    <th class="special-cell">Идеи ивента</th>
+                    <th class="special-cell">Редактирование</th>
+                    <th class="special-cell">Удаление</th>
+                </tr>
+                {% for eventsOrg in eventsOrg %}
+                <tr>
+                    <td>{{ eventsOrg.Name }}</td>
+                    <td>{{ eventsOrg.Organizer_ID.FCS }}</td>
+                    <td>{{ eventsOrg.Tags }}</td>
+                    <td>{{ eventsOrg.Date_of_event }}</td>
+                    <td>{{ eventsOrg.Ideas_for_event }}</td>
+                    <td>
+                        <a href="{% url 'edit_event_org' eventsOrg.ID %}">
+                            <button class="btn btn-info custom-edit-button">Редактировать</button>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'delete_event_org' eventsOrg.ID %}"
+                           onclick="return confirm('Вы уверены, что хотите удалить этот ивент?');">
+                            <button class="btn btn-danger custom-delete-button">Удалить</button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <div class="tables">
+        <div class="table-container">
+            <a href="{% url 'add_event_mem' %}">
+                <button class="btn btn-info custom-button">Добавить участников</button>
+            </a>
+            <table id="eventsMemTable">
+                <tr>
+                    <th class="special-cell">Название ивента</th>
+                    <th class="special-cell">Участники</th>
+                    <th class="special-cell" onclick="sortTable(2)">Статус</th>
+                    <th class="special-cell">Редактирование</th>
+                    <th class="special-cell">Удаление</th>
+                </tr>
+                {% for eventsMem in eventsMem %}
+                <tr>
+                    <td>{{ eventsMem.Event_ID.Name }}</td>
+                    <td>{{ eventsMem.Character_ID.Name }}</td>
+                    <td>{{ eventsMem.get_Passed_or_failed_display }}</td>
+                    <td>
+                        <a href="{% url 'edit_event_mem' event_id=eventsMem.Event_ID.ID event_mem_id=eventsMem.id %}">
+                            <button class="btn btn-info custom-edit-button">Редактировать</button>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'delete_event_mem' event_id=eventsMem.Event_ID.ID event_mem_id=eventsMem.id %}"
+                           onclick="return confirm('Вы уверены, что хотите удалить этого участника?');">
+                            <button class="btn btn-danger custom-delete-button">Удалить</button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function sortTable(columnIndex) {
+        var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.getElementById("eventsMemTable");
+        switching = true;
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[columnIndex];
+                y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+    }
+</script>
+{% endblock %}

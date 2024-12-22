@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %}</title>
+
+
+    <!--bootstrap-->
+    <link rel="stylesheet" href="{% static 'bootstrap\css\bootstrap.min.css' %}">
+    <!--css-->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+
+</head>
+<body>
+<header class="sticky-top">
+    <div class="header-container d-flex">
+        <navbar class="header-nav">
+            <ul class="header-list d-flex">
+                <li>
+                    <a href="/" class="nav-a m-3">Home</a>
+                </li>
+                <li>
+                    <a href="#" class="nav-a m-3">Tables</a>
+                </li>
+            </ul>
+        </navbar>
+        <div class="header-logo">
+            <a href="/"><img scr="{static 'img/logoLoL.png' %}" alt="" class="LoL-logo"></a>
+        </div>
+        <div class="header-profile">
+            <a href="#" class="m-3">Login</a>
+        </div>
+    </div>
+    >
+</header>
+<div class="container">
+    {% block content%}
+
+    {% endblock content%}
+</div>
+<img scr="{% static 'img/cornDownLeft.png' %}" class="frame1" alt="">
+<img scr="{% static 'img/cornDownRight.png' %}" class="frame2" alt="">
+<img scr="{% static 'img/cornUpLeft.png' %}" class="frame3" alt="">
+<img scr="{% static 'img/cornUpRight.png' %}" class="frame4" alt="">
+
+
+<!--js for bootstrap-->
+<script src="{% static 'bootstrap\js\bootstrap.bundle.min.js'%}"></script>
+</body>
+>
+</html>>

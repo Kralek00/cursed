@@ -1,0 +1,23 @@
+{% extends 'main/index/layout.html' %}
+
+{% block title %}Добавление персонажей{% endblock %}
+
+{% block content %}
+<div class="features">
+    <div class="container">
+        <h1>Добавление персонажей</h1>
+        <p>Добавляться должны только занятые персонажи! Добавьте предварительно отвечающего.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.Member_ID }} <br>
+            {{ form.Gender }} <br>
+            {{ form.Name }} <br>
+            <span>{{ errors }}</span>
+            <div class="button-container">
+                <button class="btn btn-success" type="submit">Добавить персонажа</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

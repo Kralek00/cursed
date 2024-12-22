@@ -1,0 +1,23 @@
+{% extends 'main/index/layout.html' %}
+
+{% block title %}Редактировать ивент{% endblock %}
+
+{% block content %}
+<div class="features">
+    <div class="container">
+        <h1>Редактировать ивент: {{ event.Name }}</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.Name }} <br>
+            {{ form.Organizer_ID }} <br>
+            {{ form.Tags }} <br>
+            {{ form.Date_of_event }} <br>
+            {{ form.Ideas_for_event }} <br>
+            <span>{{ errors }}</span>
+            <div class="button-container">
+                <button class="btn btn-success" type="submit">Сохранить изменения</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

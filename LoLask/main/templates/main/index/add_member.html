@@ -1,0 +1,26 @@
+{% extends 'main/index/layout.html' %}
+
+{% block title %}Добавление участников{% endblock %}
+
+{% block content %}
+<div class="features">
+    <div class="container">
+        <h1>Добавление участников</h1>
+        <p>Добавляются только отвечающие и админы!</p>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.FCS }} <br>
+            {{ form.Role }} <br>
+            {{ form.Link_to_the_page }} <br>
+            {{ form.Date_of_birth }} <br>
+            {{ form.Link_to_the_group }} <br>
+            {{ form.Date_of_joing }} <br>
+            <span>{{ errors }}</span>
+            <div class="button-container">
+                <button class="btn btn-success" type="submit">Добавить участника</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

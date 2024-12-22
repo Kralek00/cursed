@@ -1,0 +1,25 @@
+{% extends 'main/index/layout.html' %}
+
+{% block title %}Добавление ивента{% endblock %}
+
+{% block content %}
+<div class="features">
+    <div class="container">
+        <h1>Добавление ивента</h1>
+        <p>Добавляться должны только новые ивенты(по датам)! Добавьте предварительно организатора(админа).</p>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.Name }} <br>
+            {{ form.Organizer_ID }} <br>
+            {{ form.Tags }} <br>
+            {{ form.Date_of_event }} <br>
+            {{ form.Ideas_for_event }} <br>
+            <span>{{ errors }}</span>
+            <div class="button-container">
+                <button class="btn btn-success" type="submit">Добавить ивент</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
