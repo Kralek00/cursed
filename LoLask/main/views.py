@@ -3,11 +3,16 @@ from .models import Member, Deadline, EventOrg, EventMem, Character
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseForbidden, HttpResponse
 from openpyxl import Workbook
+from openpyxl.styles import PatternFill, Border, Side
+from docx.shared import RGBColor
+from docx.oxml import parse_xml
+from docx.oxml.ns import nsdecls
 from openpyxl.utils import get_column_letter
 from docx import Document
 from django.contrib.auth import authenticate, login, logout
 from .forms import MemberForm, CharacterForm, DeadlineForm, EventOrgForm, EventMemForm, LoginForm
 from django.contrib.auth.decorators import login_required, user_passes_test
+import datetime
 
 
 def role_required(role):
@@ -142,16 +147,61 @@ class MemberAutocomplete(autocomplete.Select2QuerySetView):
 def export_deadline_to_excel(request):
     workbook = Workbook()
     sheet = workbook.active
-    sheet.title = "Дедлайны"
 
-    headers = ["Персонаж", "Тип дедлайна", "Доп. время"]
+    # Устанавливаем название листа в соответствии с текущим месяцем и годом
+    current_month_year = datetime.datetime.now().strftime("%B %Y")
+    sheet.title = current_month_year
+
+    headers = ["Персонаж", "Ответы", "Долги", "Тип дедлайна", "Доп. время"]
     sheet.append(headers)
 
-    # Добавляем данные
-    for deadline in Deadline.objects.all():
-        sheet.append([deadline.Character_ID.Name,
-                      deadline.Type_of_deadlines,
-                      deadline.Extra_time])
+    thin_border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'),
+                         bottom=Side(style='thin'))
+
+    # Функция для добавления данных в таблицу
+    def add_data_to_sheet(deadlines):
+        for deadline in deadlines:
+            character = deadline.Character_ID
+            row = [
+                character.Name,
+                deadline.Sub_answer,
+                deadline.Miss_answer,
+                deadline.Type_of_deadlines,
+                deadline.Extra_time
+            ]
+            sheet.append(row)
+
+            # Окрашиваем ячейки и добавляем границы
+            for col in range(1, 6):
+                cell = sheet.cell(row=sheet.max_row, column=col)
+                cell.border = thin_border
+
+            if deadline.Sub_answer is not None:
+                sheet.cell(row=sheet.max_row, column=2).fill = PatternFill(start_color="93c47d", end_color="93c47d",
+                                                                           fill_type="solid")
+
+            if deadline.Miss_answer is not None:
+                if deadline.Miss_answer < 4:
+                    sheet.cell(row=sheet.max_row, column=3).fill = PatternFill(start_color="f6b26b", end_color="f6b26b",
+                                                                               fill_type="solid")
+                else:
+                    sheet.cell(row=sheet.max_row, column=3).fill = PatternFill(start_color="e6916b", end_color="e6916b",
+                                                                               fill_type="solid")
+
+    # Разделяем данные по полу
+    male_deadlines = Deadline.objects.filter(Character_ID__Gender='Male')
+    female_deadlines = Deadline.objects.filter(Character_ID__Gender='Female')
+
+    # Добавляем данные для мужских персонажей
+    sheet.append(["Мужские персонажи"])
+    add_data_to_sheet(male_deadlines)
+
+    # Добавляем пустую строку между таблицами
+    sheet.append([])
+
+    # Добавляем данные для женских персонажей
+    sheet.append(["Женские персонажи"])
+    add_data_to_sheet(female_deadlines)
 
     # Автоматическая подстройка ширины столбцов
     for column in sheet.columns:
@@ -166,8 +216,11 @@ def export_deadline_to_excel(request):
         adjusted_width = (max_length + 2)
         sheet.column_dimensions[get_column_letter(column[0].column)].width = adjusted_width
 
+    # Сохранение файла с именем, включающим текущий месяц и год
+    current_month = datetime.datetime.now().strftime("%Y-%m")
+    filename = f"deadlines_{current_month}.xlsx"
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=deadlines.xlsx'
+    response['Content-Disposition'] = f'attachment; filename={filename}'
     workbook.save(response)
     return response
 
@@ -175,25 +228,58 @@ def export_deadline_to_excel(request):
 @login_required
 @role_required('admin')
 def export_deadline_to_docx(request):
-    # Создаем новый DOCX файл
     document = Document()
     document.add_heading('Дедлайны', 0)
 
-    # Добавляем таблицу
-    table = document.add_table(rows=1, cols=3)
-    hdr_cells = table.rows[0].cells
-    hdr_cells[0].text = 'Персонаж'
-    hdr_cells[1].text = 'Тип дедлайна'
-    hdr_cells[2].text = 'Доп. время'
+    # Функция для добавления данных в таблицу
+    def add_data_to_table(deadlines, title):
+        document.add_heading(title, level=1)
+        table = document.add_table(rows=1, cols=5)
+        hdr_cells = table.rows[0].cells
+        hdr_cells[0].text = 'Персонаж'
+        hdr_cells[1].text = 'Ответы'
+        hdr_cells[2].text = 'Долги'
+        hdr_cells[3].text = 'Тип дедлайна'
+        hdr_cells[4].text = 'Доп. время'
 
-    # Добавляем данные
-    for deadline in Deadline.objects.all():
-        row_cells = table.add_row().cells
-        row_cells[0].text = deadline.Character_ID.Name
-        row_cells[1].text = deadline.Type_of_deadlines
-        row_cells[2].text = str(deadline.Extra_time) if deadline.Extra_time else ""
+        for deadline in deadlines:
+            character = deadline.Character_ID
+            row_cells = table.add_row().cells
+            row_cells[0].text = character.Name
+            row_cells[1].text = str(deadline.Sub_answer) if deadline.Sub_answer is not None else ""
+            row_cells[2].text = str(deadline.Miss_answer) if deadline.Miss_answer is not None else ""
+            row_cells[3].text = deadline.Type_of_deadlines
+            row_cells[4].text = str(deadline.Extra_time) if deadline.Extra_time else ""
 
-    # Создаем HTTP ответ
+            # Окрашиваем ячейки
+            if deadline.Sub_answer is not None:
+                shading_elm = parse_xml(r'<w:shd {} w:fill="93c47d"/>'.format(nsdecls('w')))
+                row_cells[1]._element.get_or_add_tcPr().append(shading_elm)
+
+            if deadline.Miss_answer is not None:
+                if deadline.Miss_answer < 4:
+                    shading_elm = parse_xml(r'<w:shd {} w:fill="f6b26b"/>'.format(nsdecls('w')))
+                else:
+                    shading_elm = parse_xml(r'<w:shd {} w:fill="e6916b"/>'.format(nsdecls('w')))
+                row_cells[2]._element.get_or_add_tcPr().append(shading_elm)
+
+        # Добавляем границы к таблице
+        tbl = table._tbl
+        tblBorders = parse_xml(
+            r'<w:tblBorders %s><w:top w:val="single" w:sz="4"/><w:left w:val="single" w:sz="4"/><w:bottom w:val="single" w:sz="4"/><w:right w:val="single" w:sz="4"/><w:insideH w:val="single" w:sz="4"/><w:insideV w:val="single" w:sz="4"/></w:tblBorders>' % nsdecls(
+                'w'))
+        tbl.tblPr.append(tblBorders)
+
+    # Разделяем данные по полу
+    male_deadlines = Deadline.objects.filter(Character_ID__Gender='Male')
+    female_deadlines = Deadline.objects.filter(Character_ID__Gender='Female')
+
+    # Добавляем данные для мужских персонажей
+    add_data_to_table(male_deadlines, "Мужские персонажи")
+
+    # Добавляем данные для женских персонажей
+    add_data_to_table(female_deadlines, "Женские персонажи")
+
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
     response['Content-Disposition'] = 'attachment; filename=deadlines.docx'
     document.save(response)
