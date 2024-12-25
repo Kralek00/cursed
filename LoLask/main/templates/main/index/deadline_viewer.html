@@ -15,12 +15,16 @@
             <table>
                 <tr>
                     <th class="special-cell">Персонаж(м)</th>
-                    <th class="special-cell">Ответы или долги</th>
+                    <th class="special-cell">Ответы</th>
+                    <th class="special-cell">Долги</th>
+                    <th class="special-cell">Замечание</th>
                     <th class="special-cell">Доп. время</th>
                 </tr>
                 {% for deadline in male_deadlines %}
                 <tr>
                     <td>{{ deadline.Character_ID.Name }}</td>
+                    <td>{{ deadline.Sub_answer|default_if_none:" " }}</td>
+                    <td>{{ deadline.Miss_answer|default_if_none:" " }}</td>
                     <td>{{ deadline.Type_of_deadlines }}</td>
                     <td>{{ deadline.Extra_time|default_if_none:" " }}</td>
                 </tr>
@@ -32,13 +36,17 @@
             <h2>Женские персонажи</h2>
             <table>
                 <tr>
-                    <th class="special-cell">Персонаж(ж)</th>
-                    <th class="special-cell">Ответы или долги</th>
+                    <th class="special-cell">Персонаж(м)</th>
+                    <th class="special-cell">Ответы</th>
+                    <th class="special-cell">Долги</th>
+                    <th class="special-cell">Замечание</th>
                     <th class="special-cell">Доп. время</th>
                 </tr>
                 {% for deadline in female_deadlines %}
                 <tr>
                     <td>{{ deadline.Character_ID.Name }}</td>
+                    <td>{{ deadline.Sub_answer|default_if_none:" " }}</td>
+                    <td>{{ deadline.Miss_answer|default_if_none:" " }}</td>
                     <td>{{ deadline.Type_of_deadlines }}</td>
                     <td>{{ deadline.Extra_time|default_if_none:" " }}</td>
                 </tr>
