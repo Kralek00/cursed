@@ -9,6 +9,8 @@
         <form method="post">
             {% csrf_token %}
             {{ form.Character_ID }} <br>
+            {{ form.Sub_answer }} <br>
+            {{ form.Miss_answer }} <br>
             {{ form.Type_of_deadlines }} <br>
             {{ form.Extra_time }} <br>
             <span>{{ errors }}</span>

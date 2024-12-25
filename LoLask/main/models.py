@@ -76,13 +76,13 @@ class Character(models.Model):
 class Deadline(models.Model):
     ID = models.AutoField(primary_key=True)
     Character_ID = models.ForeignKey(Character, on_delete=models.CASCADE, related_name='deadlines')
-    Answers_or_debts = models.CharField(null=True, blank=True)
+    Sub_answer = models.IntegerField(null=True, blank=True)
+    Miss_answer = models.IntegerField(null=True, blank=True)
     Extra_time = models.DateField('Доп. время', null=True, blank=True)
     Type_of_deadlines = models.TextField('Замечание:', null=True, blank=True)
 
     def __str__(self):
         return str(self.Character_ID)
-
     class Meta:
         ordering = ['Character_ID__Name']
         verbose_name = 'Дедлайн'

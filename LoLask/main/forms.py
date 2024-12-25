@@ -1,6 +1,6 @@
 from django import forms
 from django_select2.forms import Select2Widget
-from django.forms import ModelForm, TextInput, DateInput, Textarea, Select, PasswordInput
+from django.forms import ModelForm, TextInput, DateInput, Textarea, Select, PasswordInput, NumberInput, HiddenInput
 from .models import Member, Character, Deadline, EventOrg, EventMem
 
 
@@ -82,6 +82,8 @@ class DeadlineForm(forms.ModelForm):
     class Meta:
         model = Deadline
         fields = ['Character_ID',
+                  'Sub_answer',
+                  'Miss_answer',
                   'Type_of_deadlines',
                   'Extra_time']
 
@@ -89,9 +91,17 @@ class DeadlineForm(forms.ModelForm):
             "Character_ID": Select2Widget(attrs={
                 'class': 'form-control',
             }),
+            "Sub_answer": NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ответы',
+            }),
+            "Miss_answer": NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Долги',
+            }),
             "Type_of_deadlines": forms.Textarea(attrs={
                 'class': 'form-control',
-                'placeholder': 'Ответы или долги',
+                'placeholder': 'Тип дедлайна',
             }),
             "Extra_time": forms.DateInput(attrs={
                 'class': 'form-control',
